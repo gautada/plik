@@ -1,0 +1,22 @@
+/* starter css */
+body{font-family:system-ui,-apple-system,sans-serif;}
+
+.dropzone {
+  border: 2px dashed #999;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  background: #fafafa;
+  outline: none;
+}
+.dropzone.dragover {
+  border-color: #333;
+  background: #f0f0f0;
+}
+.row { display: flex; gap: 12px; justify-content: center; align-items: center; margin-top: 12px; flex-wrap: wrap; }
+.result { background: #111; color: #eee; padding: 12px; border-radius: 10px; overflow: auto; }
+.hint { color: #666; font-size: 0.9rem; margin-top: 10px; }
+
+.card { margin-top: 16px; padding: 16px; border: 1px solid #ddd; border-radius: 12px; background: #fff; }
+textarea { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; padding: 10px; }
+

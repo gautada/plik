@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Upload</h2>
+
+  <div id="dropzone" class="dropzone" tabindex="0">
+    <p><strong>Drag & drop</strong> files here</p>
+    <p>or <strong>paste</strong> from clipboard (Ctrl/⌘ + V)</p>
+    <p>or</p>
+
+    <div class="row">
+      <input id="fileInput" type="file" multiple />
+      <button id="uploadBtn" type="button">Upload selected</button>
+    </div>
+
+    <p class="hint">Tip: click the box and paste. Some browsers also paste images/screenshots.</p>
+  </div>
+
+  <h3>Results</h3>
+  <pre id="result" class="result">No uploads yet.</pre>
+
+
+  <h2>Paste text</h2>
+
+<div class="card">
+  <form id="pasteForm">
+    <label for="pasteContent"><strong>Paste content</strong></label><br />
+    <textarea id="pasteContent" name="content" rows="12" style="width:100%;"></textarea>
+
+    <div class="row" style="margin-top:12px;">
+      <label>
+        Language:
+        <select id="pasteLang" name="language">
+          <option value="plaintext">Plain text</option>
+          <option value="json">JSON</option>
+          <option value="yaml">YAML</option>
+          <option value="bash">Bash</option>
+          <option value="python">Python</option>
+          <option value="javascript">JavaScript</option>
+          <option value="typescript">TypeScript</option>
+          <option value="sql">SQL</option>
+        </select>
+      </label>
+
+      <button id="pasteBtn" type="submit">Create link</button>
+    </div>
+  </form>
+</div>
+
+
+
+  <script src="{{ url_for('static', path='js/upload.js') }}"></script>
+
+{% endblock %}
+
