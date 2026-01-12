@@ -1,0 +1,12 @@
+#!/usr/bin/env zsh
+
+set -e
+
+export PYTHONDONTWRITEBYTECODE=1
+export PYTHONUNBUFFERED=1
+# If you rely on request.base_url behind ingress, you may also set:
+# ENV FORWARDED_ALLOW_IPS="*"
+
+# Use --reload for debug 
+cd /opt/uvicornapp
+su uvicorn -c "uvicorn app.main.app --reload --host 0.0.0.0 --port 8080"
