@@ -55,6 +55,18 @@ repos:
       - id: isort
         args:
           - "--profile=black"
+  - repo: https://github.com/standard/standard
+    rev: "v17.1.2"
+    hooks:
+      - id: standard
+        files: \.(js|cjs|mjs)$
+        args: ["--fix"]
+  # - repo: https://github.com/pre-commit/mirrors-standard
+  #   rev: v17.1.0
+  #   hooks:
+  #     - id: standard
+  #       files: \.(js|cjs|mjs)$
+
   - repo: local
     hooks:
       - id: jscpd
