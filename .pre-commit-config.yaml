@@ -55,6 +55,11 @@ repos:
       - id: isort
         args:
           - "--profile=black"
+  - repo: https://github.com/psf/black
+    rev: 24.4.2   # pin a specific version
+    hooks:
+      - id: black
+        language_version: python3
   - repo: https://github.com/standard/standard
     rev: "v17.1.2"
     hooks:

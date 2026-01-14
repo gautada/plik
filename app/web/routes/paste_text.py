@@ -22,9 +22,11 @@ async def paste_text(
     rec = save_bytes(name, content.encode("utf-8"), "text/plain")
 
     base = str(request.base_url).rstrip("/")
-    return JSONResponse({
-        "ok": True,
-        "id": rec.id,
-        "view_url": f"{base}/p/{rec.id}?lang={language}",
-        "download_url": f"{base}/f/{rec.id}",
-    })
+    return JSONResponse(
+        {
+            "ok": True,
+            "id": rec.id,
+            "view_url": f"{base}/p/{rec.id}?lang={language}",
+            "download_url": f"{base}/f/{rec.id}",
+        }
+    )

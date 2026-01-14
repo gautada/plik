@@ -43,17 +43,16 @@ class BlobRecord:
     content_type: str
 
 
-def save_bytes(filename: str, content: bytes,
-               content_type: Optional[str] = None) -> BlobRecord:
+def save_bytes(
+    filename: str, content: bytes, content_type: Optional[str] = None
+) -> BlobRecord:
     blob_id = new_id()
     suffix = Path(filename).suffix if filename else ""
     stored_name = f"{blob_id}{suffix}"
     dest = BLOB_DIR / stored_name
     dest.write_bytes(content)
 
-    ct = content_type or \
-        mimetypes.guess_type(filename)[0] or \
-        "application/octet-stream"
+    ct = content_type or mimetypes.guess_type(filename)[0] or "application/octet-stream"
 
     rec = BlobRecord(
         id=blob_id,

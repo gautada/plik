@@ -30,16 +30,18 @@ async def upload(request: Request, files: List[UploadFile] = File(...)):
         # v1: dest.write_bytes(content)
         rec = save_bytes(f.filename or "upload", content, f.content_type)
 
-        saved.append({
-            "id": rec.id,
-            # v1: "original_name": f.filename,
-            "original_name": rec.original_name,
-            "bytes": rec.bytes,
-            # v1: "stored_name": dest.name,
-            # v1: "bytes": len(content),
-            # v1: "content_type": f.content_type,
-            "content_type": rec.content_type,
-            "view_url": f"{base}/p/{rec.id}",
-            "download_url": f"{base}/f/{rec.id}",
-        })
+        saved.append(
+            {
+                "id": rec.id,
+                # v1: "original_name": f.filename,
+                "original_name": rec.original_name,
+                "bytes": rec.bytes,
+                # v1: "stored_name": dest.name,
+                # v1: "bytes": len(content),
+                # v1: "content_type": f.content_type,
+                "content_type": rec.content_type,
+                "view_url": f"{base}/p/{rec.id}",
+                "download_url": f"{base}/f/{rec.id}",
+            }
+        )
     return JSONResponse({"ok": True, "saved": saved})
