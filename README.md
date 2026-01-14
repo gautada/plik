@@ -1,8 +1,7 @@
 # pastebin
 
 This is a simple utility application where we can paste; put files, text, etc.
-Then bin which is easily extract the files, images, movies, etc. at will. 
-
+Then bin which is easily extract the files, images, movies, etc. at will.
 
 ## Development Environment
 

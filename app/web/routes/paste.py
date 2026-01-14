@@ -20,6 +20,7 @@ TEXT_TYPES = {
 
 MAX_INLINE_BYTES = 200_000  # don’t try to render huge blobs inline
 
+
 @router.get("/p/{blob_id}", response_class=HTMLResponse)
 def view(blob_id: str, request: Request):
     rec = get_record(blob_id)
@@ -31,7 +32,8 @@ def view(blob_id: str, request: Request):
         return PlainTextResponse("Not found", status_code=404)
 
     inline_text = None
-    is_text = rec.content_type.startswith("text/") or rec.content_type in TEXT_TYPES
+    is_text = rec.content_type.startswith("text/") or \
+        rec.content_type in TEXT_TYPES
 
     if is_text and rec.bytes <= MAX_INLINE_BYTES:
         try:
@@ -41,7 +43,6 @@ def view(blob_id: str, request: Request):
 
     # allow `?lang=python` etc.
     lang = request.query_params.get("lang", "plaintext")
-    
     return templates.TemplateResponse(
         "paste/view.html",
         {
@@ -49,9 +50,10 @@ def view(blob_id: str, request: Request):
             "title": f"Paste {blob_id}",
             "rec": rec,
             "inline_text": inline_text,
-            "lang": lang, 
+            "lang": lang,
         },
     )
+
 
 @router.get("/f/{blob_id}")
 def download(blob_id: str):
@@ -69,4 +71,3 @@ def download(blob_id: str):
         media_type=rec.content_type,
         filename=rec.original_name,
     )
-

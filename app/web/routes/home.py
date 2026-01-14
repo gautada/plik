@@ -7,6 +7,7 @@ from app.web.templating import templates
 
 router = APIRouter()
 
+
 @router.get("/", response_class=HTMLResponse)
 def home(request: Request):
     return templates.TemplateResponse(
@@ -14,4 +15,3 @@ def home(request: Request):
         # {"request": request, "title": "Home"},
         {"request": request, "title": "Upload"},
     )
-

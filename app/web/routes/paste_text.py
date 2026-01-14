@@ -9,12 +9,14 @@ from app.infra.storage import save_bytes
 
 router = APIRouter()
 
+
 @router.post("/paste")
 async def paste_text(
     request: Request,
-    content: str = Form(...),
-    language: str = Form("plaintext"),   # optional; used for highlighting
+    content: str = Form(...),  # noqa: B008
+    language: str = Form("plaintext"),  # noqa: B008
 ):
+    # language: str = Form("plaintext"), optional; used for highlighting
     # store as .txt
     name = f"paste-{datetime.utcnow().strftime('%Y%m%d%H%M%S')}.txt"
     rec = save_bytes(name, content.encode("utf-8"), "text/plain")
@@ -26,4 +28,3 @@ async def paste_text(
         "view_url": f"{base}/p/{rec.id}?lang={language}",
         "download_url": f"{base}/f/{rec.id}",
     })
-

@@ -2,17 +2,18 @@ from __future__ import annotations
 
 from pathlib import Path
 from typing import List
-from uuid import uuid4
 
-from fastapi import APIRouter, UploadFile, File, Request
+from fastapi import APIRouter, File, Request, UploadFile
 from fastapi.responses import JSONResponse
 
 from app.infra.storage import save_bytes
 
+# from uuid import uuid4
 router = APIRouter()
 
 UPLOAD_DIR = Path("data/uploads")
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+
 
 @router.post("/upload")
 async def upload(request: Request, files: List[UploadFile] = File(...)):
@@ -22,7 +23,7 @@ async def upload(request: Request, files: List[UploadFile] = File(...)):
 
     for f in files:
         # Basic safe filename handling: store with UUID + original suffix
-        suffix = Path(f.filename).suffix if f.filename else ""
+        # suffix = Path(f.filename).suffix if f.filename else ""
         # v1: dest = UPLOAD_DIR / f"{uuid4().hex}{suffix}"
 
         content = await f.read()
@@ -41,6 +42,4 @@ async def upload(request: Request, files: List[UploadFile] = File(...)):
             "view_url": f"{base}/p/{rec.id}",
             "download_url": f"{base}/f/{rec.id}",
         })
-
     return JSONResponse({"ok": True, "saved": saved})
-
