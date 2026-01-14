@@ -66,12 +66,17 @@ repos:
       - id: standard
         files: \.(js|cjs|mjs)$
         args: ["--fix"]
-  # - repo: https://github.com/pre-commit/mirrors-standard
-  #   rev: v17.1.0
-  #   hooks:
-  #     - id: standard
-  #       files: \.(js|cjs|mjs)$
-
+#   - repo: https://github.com/pre-commit/mirrors-htmlhint
+#     rev: v1.1.4
+#     hooks:
+#       - id: htmlhint
+#         files: \.(html|htm)$
+  - repo: https://github.com/Lucas-C/pre-commit-hooks-nodejs
+    rev: v1.1.2
+    hooks:
+      - id: htmlhint
+        args: [--config, .htmlhintrc]
+        files: \.(html|htm)$
   - repo: local
     hooks:
       - id: jscpd
