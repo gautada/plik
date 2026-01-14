@@ -52,7 +52,9 @@ def save_bytes(
     dest = BLOB_DIR / stored_name
     dest.write_bytes(content)
 
-    ct = content_type or mimetypes.guess_type(filename)[0] or "application/octet-stream"
+    ct = (
+        content_type or mimetypes.guess_type(filename)[0] or "application/octet-stream"
+    )  # noqa: E501
 
     rec = BlobRecord(
         id=blob_id,

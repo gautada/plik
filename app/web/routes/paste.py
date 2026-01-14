@@ -32,7 +32,9 @@ def view(blob_id: str, request: Request):
         return PlainTextResponse("Not found", status_code=404)
 
     inline_text = None
-    is_text = rec.content_type.startswith("text/") or rec.content_type in TEXT_TYPES
+    is_text = (
+        rec.content_type.startswith("text/") or rec.content_type in TEXT_TYPES
+    )  # noqa: E501
 
     if is_text and rec.bytes <= MAX_INLINE_BYTES:
         try:
