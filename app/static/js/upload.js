@@ -253,4 +253,3 @@ if (pasteForm) {
     if (dzView && textView) exitTextMode()
   })
 }
-
