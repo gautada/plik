@@ -1,8 +1,8 @@
-{% extends "base.html" %}
-{% block content %}
-  <h2>Upload</h2>
+<h2>Upload or Paste</h2>
 
-  <div id="dropzone" class="dropzone" tabindex="0">
+<div id="dropzone" class="dropzone" tabindex="0" aria-label="Upload or paste zone">
+  <!-- Dropzone view -->
+  <div id="dzView">
     <p><strong>Drag &amp; drop</strong> files here</p>
     <p>or <strong>paste</strong> from clipboard (Ctrl/⌘ + V)</p>
     <p>or</p>
@@ -12,43 +12,47 @@
       <button id="uploadBtn" type="button">Upload selected</button>
     </div>
 
-    <p class="hint">Tip: click the box and paste. Some browsers also paste images/screenshots.</p>
+    <p class="hint">Tip: double-click or start typing to paste plain text instead.</p>
   </div>
 
-  <h3>Results</h3>
-  <pre id="result" class="result">No uploads yet.</pre>
+  <!-- Text view (hidden by default) -->
+  <div id="textView" class="card" style="display:none; width:100%;">
+    <form id="pasteForm">
+      <label for="pasteContent"><strong>Paste content</strong></label><br />
+      <textarea
+        id="pasteContent"
+        name="content"
+        rows="12"
+        style="width:100%;"
+        placeholder="Type or paste plain text here..."
+      ></textarea>
 
+      <div class="row" style="margin-top:12px;">
+        <label>
+          Language:
+          <select id="pasteLang" name="language">
+            <option value="plaintext">Plain text</option>
+            <option value="json">JSON</option>
+            <option value="yaml">YAML</option>
+            <option value="bash">Bash</option>
+            <option value="python">Python</option>
+            <option value="javascript">JavaScript</option>
+            <option value="typescript">TypeScript</option>
+            <option value="sql">SQL</option>
+          </select>
+        </label>
 
-  <h2>Paste text</h2>
+        <button id="pasteBtn" type="submit">Create link</button>
+        <button id="cancelTextBtn" type="button">Cancel</button>
+      </div>
 
-<div class="card">
-  <form id="pasteForm">
-    <label for="pasteContent"><strong>Paste content</strong></label><br />
-    <textarea id="pasteContent" name="content" rows="12" style="width:100%;"></textarea>
-
-    <div class="row" style="margin-top:12px;">
-      <label>
-        Language:
-        <select id="pasteLang" name="language">
-          <option value="plaintext">Plain text</option>
-          <option value="json">JSON</option>
-          <option value="yaml">YAML</option>
-          <option value="bash">Bash</option>
-          <option value="python">Python</option>
-          <option value="javascript">JavaScript</option>
-          <option value="typescript">TypeScript</option>
-          <option value="sql">SQL</option>
-        </select>
-      </label>
-
-      <button id="pasteBtn" type="submit">Create link</button>
-    </div>
-  </form>
+      <p class="hint" style="margin-top:8px;">Esc or Cancel returns to file drop mode.</p>
+    </form>
+  </div>
 </div>
+ 
+<h3>Results</h3>
+<pre id="result" class="result">No uploads yet.</pre>
 
-
-
-  <script src="{{ url_for('static', path='js/upload.js') }}"></script>
-
-{% endblock %}
+<script src="{{ url_for('static', path='js/upload.js') }}"></script>
 

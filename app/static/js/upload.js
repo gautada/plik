@@ -7,7 +7,13 @@ const pasteForm = document.getElementById('pasteForm')
 const pasteContent = document.getElementById('pasteContent')
 const pasteLang = document.getElementById('pasteLang')
 
+// Combined-zone view elements (exist only in the combined template version)
+const dzView = document.getElementById('dzView')
+const textView = document.getElementById('textView')
+const cancelTextBtn = document.getElementById('cancelTextBtn')
+
 let pendingFiles = []
+let inTextMode = false
 
 // ---------- UI helpers ----------
 function setResult (obj) {
@@ -17,6 +23,33 @@ function setResult (obj) {
 
 function setDragover (isOver) {
   dropzone.classList.toggle('dragover', isOver)
+}
+
+function enterTextMode (opts) {
+  if (inTextMode) return
+  if (!dzView || !textView || !pasteContent) return
+
+  inTextMode = true
+  dzView.style.display = 'none'
+  textView.style.display = 'block'
+
+  const seedText = opts?.seedText || ''
+  if (seedText) pasteContent.value = seedText
+
+  pasteContent.focus()
+  const end = pasteContent.value.length
+  pasteContent.selectionStart = end
+  pasteContent.selectionEnd = end
+}
+
+function exitTextMode () {
+  if (!inTextMode) return
+  if (!dzView || !textView) return
+
+  inTextMode = false
+  textView.style.display = 'none'
+  dzView.style.display = 'block'
+  if (dropzone) dropzone.focus()
 }
 
 // ---------- Network helpers ----------
@@ -115,6 +148,8 @@ async function handlePaste (e) {
   // Otherwise, try text paste
   const text = await textFromClipboardItems(items)
   if (text.trim() && pasteContent) {
+    // If you are using the combined zone, switch into text mode automatically
+    if (dzView && textView && !inTextMode) enterTextMode()
     pasteContent.value = text
     setResult('Pasted text into the textarea. Submit to create a link.')
   }
@@ -123,10 +158,60 @@ async function handlePaste (e) {
 // ---------- Event wiring ----------
 
 // File picker + button
-if (fileInput) fileInput.addEventListener('change', (e) => addFiles(e.target.files))
+if (fileInput) {
+  fileInput.addEventListener('change', (e) => addFiles(e.target.files))
+}
 if (uploadBtn) uploadBtn.addEventListener('click', () => uploadFiles(pendingFiles))
 
-// Drag & drop
+// Combined-zone behavior: double click or typing switches to textarea
+if (dropzone && dzView && textView && pasteContent) {
+  dropzone.addEventListener('dblclick', () => enterTextMode())
+
+  // Key typing on the dropzone switches to textarea (but NOT Cmd/Ctrl+V)
+  dropzone.addEventListener('keydown', (e) => {
+    if (inTextMode) {
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        exitTextMode()
+      }
+      return
+    }
+
+    const isPaste = (e.ctrlKey || e.metaKey) && (e.key === 'v' || e.key === 'V')
+    if (isPaste) return
+
+    // ignore navigation/modifier keys
+    if (
+      e.key === 'Shift' ||
+      e.key === 'Control' ||
+      e.key === 'Alt' ||
+      e.key === 'Meta' ||
+      e.key === 'Tab' ||
+      e.key === 'Enter' ||
+      e.key.startsWith('Arrow')
+    ) {
+      return
+    }
+
+    // printable char => enter text mode and seed that character
+    if (e.key.length === 1) {
+      e.preventDefault()
+      enterTextMode({ seedText: e.key })
+    }
+  })
+
+  // Esc inside textarea returns to dropzone mode
+  pasteContent.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      e.preventDefault()
+      exitTextMode()
+    }
+  })
+
+  if (cancelTextBtn) cancelTextBtn.addEventListener('click', exitTextMode)
+}
+
+// Drag & drop + paste (keep existing behavior)
 if (dropzone) {
   dropzone.addEventListener('dragover', (e) => {
     e.preventDefault()
@@ -163,5 +248,9 @@ if (pasteForm) {
 
     setResult(`Paste created:\n${data.view_url}`)
     if (pasteContent) pasteContent.value = ''
+
+    // If you're using the combined-zone UI, pop back to drop mode after submit
+    if (dzView && textView) exitTextMode()
   })
 }
+
